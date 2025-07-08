@@ -3,14 +3,22 @@ from sqlalchemy.orm import Session
 from app import schemas
 from app import crud
 from app.database import SessionLocal, engine, Base
-
-import os
-print("DB ENV:", os.getenv("DB_HOST"), os.getenv("DB_USER"), os.getenv("DB_PASSWORD"))
-
+from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "https://juliettkhar.github.io"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def get_db():
     db = SessionLocal()

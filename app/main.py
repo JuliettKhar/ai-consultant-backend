@@ -2,8 +2,10 @@ from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from app import schemas
 from app import crud
+from app import models
 from app.database import SessionLocal, engine, Base
 from fastapi.middleware.cors import CORSMiddleware
+from typing import List, Optional
 
 Base.metadata.create_all(bind=engine)
 
@@ -32,6 +34,18 @@ def get_db():
 def create_message(message: schemas.MessageCreate, db: Session = Depends(get_db)):
     return crud.create_message(db, message=message)
 
-@app.get("/messages", response_model=list[schemas.Message])
-def read_messages(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    return crud.get_messages(db, skip=skip, limit=limit)
+@app.get("/messages", response_model=List[schemas.Message])
+def get_messages(session_id: Optional[str] = None, db: Session = Depends(get_db)):
+    query = db.query(models.Message)
+    if session_id:
+        query = query.filter(models.Message.session_id == session_id)
+    return query.order_by(models.Message.date).all()
+
+
+@app.post("/sessions", response_model=schemas.Session)
+def create_session(db: Session = Depends(get_db)):
+    new_session = models.Session()
+    db.add(new_session)
+    db.commit()
+    db.refresh(new_session)
+    return new_session

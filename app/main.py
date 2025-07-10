@@ -6,6 +6,7 @@ from app import models
 from app.database import SessionLocal, engine, Base
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Optional
+from app.database import get_db
 
 Base.metadata.create_all(bind=engine)
 
@@ -21,14 +22,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-def get_db():
-    db = SessionLocal()
-
-    try:
-        yield db
-    finally:
-        db.close()
 
 @app.post("/messages", response_model=schemas.Message)
 def create_message(message: schemas.MessageCreate, db: Session = Depends(get_db)):

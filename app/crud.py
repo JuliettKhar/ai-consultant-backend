@@ -3,8 +3,6 @@ from app import models
 from app import schemas
 from app.database import get_db
 from fastapi import Depends
-from dotenv import load_dotenv
-load_dotenv()
 
 
 def get_messages(db: Session, session_id: str):

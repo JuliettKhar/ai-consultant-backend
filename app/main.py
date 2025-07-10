@@ -36,10 +36,11 @@ def create_message(message: schemas.MessageCreate, db: Session = Depends(get_db)
 
 @app.get("/messages", response_model=List[schemas.Message])
 def get_messages(session_id: Optional[str] = None, db: Session = Depends(get_db)):
-    query = db.query(models.Message)
-    if session_id:
-        query = query.filter(models.Message.session_id == session_id)
-    return query.order_by(models.Message.date).all()
+    return crud.get_messages(db, session_id=session_id)
+    # query = db.query(models.Message)
+    # if session_id:
+    #     query = query.filter(models.Message.session_id == session_id)
+    # return query.order_by(models.Message.date).all()
 
 
 @app.post("/sessions", response_model=schemas.Session)

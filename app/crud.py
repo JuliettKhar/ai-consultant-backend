@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
 from app import models
 from app import schemas
-import os
+from app.database import get_db
+from fastapi import Depends
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -25,5 +26,5 @@ def create_message(db: Session, message: schemas.MessageCreate):
     db.refresh(db_message)
     return db_message
 
-def get_api_key():
-    return os.getenv("API_KEY")
+def get_sessions(db: Session = Depends(get_db)):
+    return db.query(models.Session).order_by(models.Session.created_at.desc()).all()

@@ -37,10 +37,6 @@ def create_message(message: schemas.MessageCreate, db: Session = Depends(get_db)
 @app.get("/messages", response_model=List[schemas.Message])
 def get_messages(session_id: Optional[str] = None, db: Session = Depends(get_db)):
     return crud.get_messages(db, session_id=session_id)
-    # query = db.query(models.Message)
-    # if session_id:
-    #     query = query.filter(models.Message.session_id == session_id)
-    # return query.order_by(models.Message.date).all()
 
 
 @app.post("/sessions", response_model=schemas.Session)
@@ -50,3 +46,7 @@ def create_session(db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_session)
     return new_session
+
+@app.get("/sessions", response_model=List[schemas.Session])
+def get_sessions(db: Session = Depends(get_db)):
+    return crud.get_sessions(db)

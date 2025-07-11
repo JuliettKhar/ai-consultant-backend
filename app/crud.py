@@ -3,6 +3,7 @@ from app import models
 from app import schemas
 from app.database import get_db
 from fastapi import Depends
+from fastapi import HTTPException
 
 
 def get_messages(db: Session, session_id: str):
@@ -26,3 +27,11 @@ def create_message(db: Session, message: schemas.MessageCreate):
 
 def get_sessions(db: Session = Depends(get_db)):
     return db.query(models.Session).order_by(models.Session.created_at.desc()).all()
+
+def delete_sessions(session_id: str, db: Session = Depends(get_db)):
+    session = db.query(models.Session).filter(models.Session.id == session_id).first()
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    db.delete(session)
+    db.commit()
+    return {"detail": "Session deleted"}

@@ -43,3 +43,7 @@ def create_session(db: Session = Depends(get_db)):
 @app.get("/sessions", response_model=List[schemas.Session])
 def get_sessions(db: Session = Depends(get_db)):
     return crud.get_sessions(db)
+
+@app.delete("/sessions/{session_id}")
+def delete_session(session_id: str, db: Session = Depends(get_db)):
+    return crud.delete_session(session_id=session_id, db=db)

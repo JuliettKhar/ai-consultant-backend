@@ -28,7 +28,7 @@ def create_message(db: Session, message: schemas.MessageCreate):
 def get_sessions(db: Session = Depends(get_db)):
     return db.query(models.Session).order_by(models.Session.created_at.desc()).all()
 
-def delete_sessions(session_id: str, db: Session = Depends(get_db)):
+def delete_session(session_id: str, db: Session = Depends(get_db)):
     session = db.query(models.Session).filter(models.Session.id == session_id).first()
     if not session:
         raise HTTPException(status_code=404, detail="Session not found")

@@ -1,6 +1,6 @@
 # 🧠 AI Consultant Backend
 
-FastAPI project providing the backend API for the AI Consultant application. Supports chat sessions, usage analytics, data export, admin tools, and PostgreSQL integration.
+FastAPI project providing the backend API for the AI Consultant application. Supports chat sessions, admin tools, and PostgreSQL integration.
 
 ---
 

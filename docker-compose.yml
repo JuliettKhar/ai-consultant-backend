@@ -1,8 +1,37 @@
+#services:
+#  backend:
+#    build: .
+#    network_mode: "host"
+#    env_file:
+#      - .env
+#    volumes:
+#      - .:/app
+
+version: '3.9'
+
 services:
+  db:
+    image: postgres:15
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   backend:
     build: .
-    network_mode: "host"
+    depends_on:
+      - db
+#    network_mode: "host"
     env_file:
       - .env
     volumes:
       - .:/app
+    ports:
+      - "8000:8000"
+    command: ["sh", "-c", "sleep 15 && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"]
+
+volumes:
+  postgres_data:

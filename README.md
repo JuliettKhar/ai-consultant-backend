@@ -13,7 +13,7 @@ FastAPI project providing the backend API for the AI Consultant application. Sup
 
 ---
 
-## 🚀 Quick Start (local, no Docker)
+## 🚀 Quick Start 
 
 1. Clone the repository:
 
